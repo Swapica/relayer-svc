@@ -1,0 +1,16 @@
+log:
+  level: debug
+  disable_sentry: true
+
+listener:
+  addr: :8000
+
+transactor:
+  private_key: ""
+
+cop:
+  disabled: true
+  endpoint: "http://cop"
+  upstream: "http://relayer-svc"
+  service_name: relayer-svc
+  service_port: 80

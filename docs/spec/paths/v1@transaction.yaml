@@ -1,0 +1,37 @@
+post:
+  tags:
+    - Transaction
+  summary: Contract call
+  operationId: contractCall
+  description: Call `executeOrder`, `executeMatchOrder` methods of Swapica contract by back-end service
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ExecuteOrderRequest'
+  responses:
+    '204':
+      description: Transaction sent
+    '400':
+      description: Request was invalid in some way
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    '403':
+      description: Invalid back-end signature
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    '500':
+      description: Internal error
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'

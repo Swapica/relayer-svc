@@ -1,0 +1,40 @@
+allOf:
+  - $ref: '#/components/schemas/EvmTransactionKey'
+  - type: object
+    x-go-is-request: true
+    required:
+      - attributes
+    properties:
+      attributes:
+        type: object
+        required:
+          - from
+          - to
+          - value
+          - data
+          - chain_id
+        properties:
+          from:
+            type: string
+            pattern: '^0x[0-9a-fA-F]{40}$'
+            description: The address of the sender
+            example: "0x71c7656ec7ab88b098defb751b7401b5f6d8976f"
+          to:
+            type: string
+            pattern: '^0x[0-9a-fA-F]{40}$'
+            description: The address of the transaction recipient
+            example: "0x71c7656ec7ab88b098defb751b7401b5f6d8976f"
+          value:
+            type: string
+            pattern: '^0x[0-9a-f]+$'
+            description: The amount of Wei to send
+            example: "0x5fd71"
+          data:
+            type: string
+            pattern: '^0x[0-9a-f]+$'
+            description: Transaction call data
+            example: "0xa9059cbb000000000000000000000000ee3bc3e47d3c2dc1b"
+          chain_id:
+            type: string
+            pattern: '^0x[0-9a-f]+$'
+            example: "0x6"
