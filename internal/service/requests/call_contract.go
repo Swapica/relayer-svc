@@ -2,10 +2,11 @@ package requests
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/Swapica/relayer-svc/resources"
 	val "github.com/go-ozzo/ozzo-validation/v4"
 	"gitlab.com/distributed_lab/logan/v3/errors"
-	"net/http"
 )
 
 func NewCallContractRequest(r *http.Request) (resources.EvmTransactionRequest, error) {

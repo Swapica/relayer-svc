@@ -6,7 +6,16 @@ listener:
   addr: :8000
 
 transactor:
-  private_key: ""
+  private_key: "the same as signer.eth_signer in swapica-svc"
+
+chains:
+  list:
+  - id: 5
+    contract: "Goerli Swapica address"
+    rpc: "https://goerli.infura.io/v3/YOUR_API_KEY"
+  - id: 97
+    contract: "BSC testnet Swapica address"
+    rpc: "https://data-seed-prebsc-1-s1.binance.org:8545"
 
 cop:
   disabled: true

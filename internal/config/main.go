@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/Swapica/relayer-svc/internal/signature"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/copus"
 	"gitlab.com/distributed_lab/kit/copus/types"
@@ -11,6 +12,9 @@ type Config interface {
 	comfig.Logger
 	types.Copuser
 	comfig.Listenerer
+
+	Chains() Chains
+	Transactor() signature.Signer
 }
 
 type config struct {
@@ -18,6 +22,9 @@ type config struct {
 	types.Copuser
 	comfig.Listenerer
 	getter kv.Getter
+
+	chains     comfig.Once
+	transactor comfig.Once
 }
 
 func New(getter kv.Getter) Config {
