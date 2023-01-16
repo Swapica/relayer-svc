@@ -18,7 +18,7 @@ func (s *service) router() chi.Router {
 			handlers.CtxTransactor(s.cfg.Transactor()),
 		),
 	)
-	r.Route("/integrations/relayer-svc", func(r chi.Router) {
+	r.Route("/integrations/relayer", func(r chi.Router) {
 		r.Post("/transaction", handlers.CallContract)
 	})
 

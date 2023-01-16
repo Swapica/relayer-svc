@@ -1,15 +1,16 @@
 package config
 
 import (
+	"github.com/ethereum/go-ethereum/common"
 	"gitlab.com/distributed_lab/figure/v3"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
 type Chain struct {
-	ID       int64  `fig:"id,required"`
-	Contract string `fig:"contract,required"`
-	RPC      string `fig:"rpc,required"`
+	ID       int64          `fig:"id,required"`
+	Contract common.Address `fig:"contract,required"`
+	RPC      string         `fig:"rpc,required"`
 }
 
 type Chains []Chain
@@ -21,6 +22,7 @@ func (c *config) Chains() Chains {
 		}
 
 		err := figure.Out(&cfg).
+			With(figure.EthereumHooks).
 			From(kv.MustGetStringMap(c.getter, "chains")).
 			Please()
 		if err != nil {
