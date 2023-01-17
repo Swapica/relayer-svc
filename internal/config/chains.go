@@ -9,6 +9,7 @@ import (
 
 func (c *config) Chains() tx.Chains {
 	return c.chains.Do(func() interface{} {
+		const errFigOut = "failed to figure out chains"
 		var cfg struct {
 			tx.Chains `fig:"list,required"`
 		}
@@ -18,9 +19,35 @@ func (c *config) Chains() tx.Chains {
 			From(kv.MustGetStringMap(c.getter, "chains")).
 			Please()
 		if err != nil {
-			panic(errors.Wrap(err, "failed to figure out chains"))
+			panic(errors.Wrap(err, errFigOut))
+		}
+		if len(cfg.Chains) == 0 {
+			panic(errFigOut + ": at least one chain must be present")
+		}
+
+		ids := make([]int64, len(cfg.Chains))
+		for i, ch := range cfg.Chains {
+			ids[i] = ch.ID
+		}
+		if !isSet(ids) {
+			panic(errFigOut + ": same chain IDs must not be present")
 		}
 
 		return cfg.Chains
 	}).(tx.Chains)
+}
+
+func isSet[T comparable](arr []T) bool {
+	if len(arr) < 2 {
+		return true
+	}
+
+	for i := 0; i < len(arr)-1; i++ {
+		for j := i + 1; j < len(arr); j++ {
+			if arr[i] == arr[j] {
+				return false
+			}
+		}
+	}
+	return true
 }
