@@ -3,13 +3,13 @@ package config
 import (
 	"crypto/ecdsa"
 
-	"github.com/Swapica/relayer-svc/internal/signature"
+	"github.com/Swapica/relayer-svc/internal/tx"
 	"gitlab.com/distributed_lab/figure/v3"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
-func (c *config) Transactor() signature.Signer {
+func (c *config) Transactor() tx.Transactor {
 	return c.transactor.Do(func() interface{} {
 		var cfg struct {
 			*ecdsa.PrivateKey `fig:"private_key,required"`
@@ -24,6 +24,6 @@ func (c *config) Transactor() signature.Signer {
 			panic(errors.Wrap(err, "failed to figure out transactor"))
 		}
 
-		return signature.NewSigner(cfg.PrivateKey)
-	}).(signature.Signer)
+		return tx.NewTransactor(cfg.PrivateKey)
+	}).(tx.Transactor)
 }

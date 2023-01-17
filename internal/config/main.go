@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/Swapica/relayer-svc/internal/signature"
+	"github.com/Swapica/relayer-svc/internal/tx"
 	"gitlab.com/distributed_lab/kit/comfig"
 	"gitlab.com/distributed_lab/kit/copus"
 	"gitlab.com/distributed_lab/kit/copus/types"
@@ -12,9 +12,8 @@ type Config interface {
 	comfig.Logger
 	types.Copuser
 	comfig.Listenerer
-
-	Chains() Chains
-	Transactor() signature.Signer
+	tx.Chainer
+	tx.Transactorer
 }
 
 type config struct {
