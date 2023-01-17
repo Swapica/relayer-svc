@@ -13,7 +13,7 @@ post:
             - data
           properties:
             data:
-              $ref: '#/components/schemas/ExecuteOrderRequest'
+              $ref: '#/components/schemas/EvmTransaction'
   responses:
     '204':
       description: Transaction sent
@@ -23,8 +23,8 @@ post:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
-    '403':
-      description: Invalid back-end signature
+    '404':
+      description: The given `chain_id` does not exist
       content:
         application/vnd.api+json:
           schema:

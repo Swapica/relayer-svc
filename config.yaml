@@ -22,4 +22,5 @@ cop:
   endpoint: "http://cop"
   upstream: "http://relayer-svc"
   service_name: relayer-svc
+  service_prefix: "integrations/relayer"
   service_port: 80

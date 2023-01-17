@@ -19,7 +19,7 @@ func CallContract(w http.ResponseWriter, r *http.Request) {
 	chain := Chains(r).Get(*request.Data.Attributes.ChainId)
 	if chain == nil {
 		Log(r).Debug("non-existent chain ID")
-		ape.RenderErr(w, problems.BadRequest(nil)...)
+		ape.RenderErr(w, problems.NotFound())
 		return
 	}
 
