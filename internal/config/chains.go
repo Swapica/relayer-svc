@@ -26,11 +26,13 @@ func (c *config) Chains() tx.Chains {
 		}
 
 		ids := make([]int64, len(cfg.Chains))
+		names := make([]string, len(cfg.Chains))
 		for i, ch := range cfg.Chains {
 			ids[i] = ch.ID
+			names[i] = ch.Name
 		}
-		if !isSet(ids) {
-			panic(errFigOut + ": same chain IDs must not be present")
+		if !isSet(ids) || !isSet(names) {
+			panic(errFigOut + ": same chain IDs or names must not be present")
 		}
 
 		return cfg.Chains
@@ -38,10 +40,6 @@ func (c *config) Chains() tx.Chains {
 }
 
 func isSet[T comparable](arr []T) bool {
-	if len(arr) < 2 {
-		return true
-	}
-
 	for i := 0; i < len(arr)-1; i++ {
 		for j := i + 1; j < len(arr); j++ {
 			if arr[i] == arr[j] {

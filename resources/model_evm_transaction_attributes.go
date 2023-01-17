@@ -5,8 +5,8 @@
 package resources
 
 type EvmTransactionAttributes struct {
-	// Destination blockchain's `chainId` parameter
-	ChainId *int64 `json:"chain_id"`
+	// Destination blockchain code name
+	Chain string `json:"chain"`
 	// Ethereum transaction call data
 	Data string `json:"data"`
 }

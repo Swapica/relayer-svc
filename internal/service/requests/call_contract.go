@@ -19,8 +19,8 @@ func NewCallContractRequest(r *http.Request) (resources.EvmTransactionRequest, e
 	}
 
 	return dst, val.Errors{
-		"data/type":                val.Validate(dst.Data.Type, val.Required, val.In(resources.EVM_TRANSACTION)),
-		"data/attributes/data":     val.Validate(dst.Data.Attributes.Data, val.Required, val.Match(hexRegexp)),
-		"data/attributes/chain_id": val.Validate(dst.Data.Attributes.ChainId, val.NotNil),
+		"data/type":             val.Validate(dst.Data.Type, val.Required, val.In(resources.EVM_TRANSACTION)),
+		"data/attributes/data":  val.Validate(dst.Data.Attributes.Data, val.Required, val.Match(hexRegexp)),
+		"data/attributes/chain": val.Validate(dst.Data.Attributes.Chain, val.Required),
 	}.Filter()
 }

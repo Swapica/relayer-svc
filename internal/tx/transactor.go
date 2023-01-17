@@ -29,19 +29,19 @@ func NewTransactor(pk *ecdsa.PrivateKey) Transactor {
 }
 
 func (t *transactor) Transact(ch Chain) error {
-	cidField := map[string]interface{}{"chain_id": ch.ID}
+	chainFields := map[string]interface{}{"chain_id": ch.ID, "chain_name": ch.Name}
 	cli, err := ethclient.Dial(ch.RPC)
 	if err != nil {
-		return errors.Wrap(err, "failed to connect network by RPC", cidField)
+		return errors.Wrap(err, "failed to connect network by RPC", chainFields)
 	}
 
 	// FIXME this is the mock, replace it as soon as relayer contract is available
 	tr, err := gobind.NewSwapicaTransactor(ch.Contract, cli)
 	if err != nil {
-		return errors.Wrap(err, "failed to get contract transactor", cidField)
+		return errors.Wrap(err, "failed to get contract transactor", chainFields)
 	}
 
 	opts, _ := bind.NewKeyedTransactorWithChainID(t.privKey, new(big.Int).SetInt64(ch.ID))
 	_, err = tr.ExecuteOrder(opts, []byte{}, [][]byte{})
-	return errors.Wrap(err, "failed to call contract", cidField)
+	return errors.Wrap(err, "failed to call contract", chainFields)
 }

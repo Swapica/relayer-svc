@@ -9,15 +9,14 @@ allOf:
         type: object
         required:
           - data
-          - chain_id
+          - chain
         properties:
           data:
             type: string
             pattern: '^0x[0-9a-f]+$'
             description: Ethereum transaction call data
             example: "0xa9059cbb000000000000000000000000ee3bc3e47d3c2dc1b"
-          chain_id:
-            type: integer
-            format: "*int64"
-            description: Destination blockchain's `chainId` parameter
-            example: 5
+          chain:
+            type: string
+            description: Destination blockchain code name
+            example: "BSC Testnet"
