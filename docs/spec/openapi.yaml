@@ -1,0 +1,8 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: relayer-svc
+  description: Pay user fees for Swapica contract calls on different networks
+servers:
+  - url: 'https://api.demo.tokend.io'
+    description: TokenD Developer Environment

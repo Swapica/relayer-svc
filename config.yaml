@@ -1,0 +1,28 @@
+log:
+  level: debug
+  disable_sentry: true
+
+listener:
+  addr: :8000
+
+transactor:
+  private_key: "the same as signer.eth_signer in swapica-svc"
+
+chains:
+  list:
+    - name: "goerli"
+      contract: "Goerli Swapica address"
+      rpc: "https://goerli.infura.io/v3/YOUR_API_KEY"
+      chain_id: 5
+    - name: "BSC Testnet"
+      contract: "BSC testnet Swapica address"
+      rpc: "https://data-seed-prebsc-1-s1.binance.org:8545"
+      chain_id: 97
+
+cop:
+  disabled: true
+  endpoint: "http://cop"
+  upstream: "http://relayer-svc"
+  service_name: relayer-svc
+  service_prefix: "integrations/relayer"
+  service_port: 80
