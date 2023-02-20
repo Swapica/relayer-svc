@@ -1,7 +1,10 @@
 package tx
 
 import (
+	"context"
 	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/crypto"
 	"math/big"
 
 	"github.com/Swapica/relayer-svc/internal/gobind"
@@ -15,7 +18,7 @@ type Transactorer interface {
 }
 
 type Transactor interface {
-	Transact(Chain) error
+	Transact(Chain, []byte) error
 }
 
 type transactor struct {
@@ -28,20 +31,32 @@ func NewTransactor(pk *ecdsa.PrivateKey) Transactor {
 	}
 }
 
-func (t *transactor) Transact(ch Chain) error {
+func (t *transactor) Transact(ch Chain, data []byte) error {
 	chainFields := map[string]interface{}{"chain_id": ch.ID, "chain_name": ch.Name}
 	cli, err := ethclient.Dial(ch.RPC)
 	if err != nil {
 		return errors.Wrap(err, "failed to connect network by RPC", chainFields)
 	}
 
-	// FIXME this is the mock, replace it as soon as relayer contract is available
-	tr, err := gobind.NewSwapicaTransactor(ch.Contract, cli)
+	tr, err := gobind.NewRelayerTransactor(ch.Contract, cli)
 	if err != nil {
 		return errors.Wrap(err, "failed to get contract transactor", chainFields)
 	}
 
+	hash := crypto.Keccak256Hash(data)
+	signature, err := crypto.Sign(hash.Bytes(), t.privKey)
+	if err != nil {
+		return errors.Wrap(err, "failed to sign transaction data", chainFields)
+	}
+
+	gasLimit, err := cli.EstimateGas(context.Background(), ethereum.CallMsg{})
+	if err != nil {
+		return errors.Wrap(err, "failed to estimate gas", chainFields)
+	}
+
 	opts, _ := bind.NewKeyedTransactorWithChainID(t.privKey, new(big.Int).SetInt64(ch.ID))
-	_, err = tr.ExecuteOrder(opts, []byte{}, [][]byte{})
+	opts.GasLimit = gasLimit
+
+	_, err = tr.Execute(opts, data, [][]byte{signature})
 	return errors.Wrap(err, "failed to call contract", chainFields)
 }

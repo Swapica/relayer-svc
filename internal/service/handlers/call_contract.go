@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"net/http"
 
 	"github.com/Swapica/relayer-svc/internal/service/requests"
@@ -23,7 +24,14 @@ func CallContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = Transactor(r).Transact(*chain); err != nil {
+	data, err := hexutil.Decode(request.Data.Attributes.Data)
+	if err != nil {
+		Log(r).WithError(err).Error("failed to decode transaction data")
+		ape.RenderErr(w, problems.InternalError())
+		return
+	}
+
+	if err = Transactor(r).Transact(*chain, data); err != nil {
 		Log(r).WithError(err).Error("failed to send transaction")
 		ape.RenderErr(w, problems.InternalError())
 		return
