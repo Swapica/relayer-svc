@@ -49,7 +49,7 @@ func (t *transactor) Transact(ch Chain, data []byte) error {
 		return errors.Wrap(err, "failed to sign transaction data", chainFields)
 	}
 
-	gasLimit, err := cli.EstimateGas(context.Background(), ethereum.CallMsg{})
+	gasLimit, err := cli.EstimateGas(context.Background(), ethereum.CallMsg{To: &ch.Contract, Data: data})
 	if err != nil {
 		return errors.Wrap(err, "failed to estimate gas", chainFields)
 	}
