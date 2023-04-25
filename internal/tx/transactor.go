@@ -1,14 +1,13 @@
 package tx
 
 import (
-	"context"
 	"crypto/ecdsa"
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/crypto"
+	"fmt"
 	"math/big"
 
 	"github.com/Swapica/relayer-svc/internal/gobind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
@@ -43,20 +42,21 @@ func (t *transactor) Transact(ch Chain, data []byte) error {
 		return errors.Wrap(err, "failed to get contract transactor", chainFields)
 	}
 
-	hash := crypto.Keccak256Hash(data)
-	signature, err := crypto.Sign(hash.Bytes(), t.privKey)
+	opts, _ := bind.NewKeyedTransactorWithChainID(t.privKey, new(big.Int).SetInt64(ch.ID))
+	opts.GasLimit = 300000
+
+	hash := crypto.Keccak256(data)
+	signature, err := crypto.Sign(signHash(hash), t.privKey)
 	if err != nil {
 		return errors.Wrap(err, "failed to sign transaction data", chainFields)
 	}
-
-	gasLimit, err := cli.EstimateGas(context.Background(), ethereum.CallMsg{To: &ch.Contract, Data: data})
-	if err != nil {
-		return errors.Wrap(err, "failed to estimate gas", chainFields)
-	}
-
-	opts, _ := bind.NewKeyedTransactorWithChainID(t.privKey, new(big.Int).SetInt64(ch.ID))
-	opts.GasLimit = gasLimit
+	signature[64] += 27
 
 	_, err = tr.Execute(opts, data, [][]byte{signature})
 	return errors.Wrap(err, "failed to call contract", chainFields)
+}
+
+func signHash(data []byte) []byte {
+	msg := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), data)
+	return crypto.Keccak256([]byte(msg))
 }
