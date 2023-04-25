@@ -1,0 +1,22 @@
+allOf:
+  - $ref: '#/components/schemas/EvmTransactionKey'
+  - type: object
+    x-go-is-request: true
+    required:
+      - attributes
+    properties:
+      attributes:
+        type: object
+        required:
+          - data
+          - chain
+        properties:
+          data:
+            type: string
+            pattern: '^0x[0-9a-f]+$'
+            description: Ethereum transaction call data
+            example: "0xa9059cbb000000000000000000000000ee3bc3e47d3c2dc1b"
+          chain:
+            type: string
+            description: Destination blockchain code name
+            example: "BSC Testnet"
