@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	sha3 "github.com/miguelmota/go-solidity-sha3"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
@@ -45,8 +46,10 @@ func (t *transactor) Transact(ch Chain, data []byte) error {
 	opts, _ := bind.NewKeyedTransactorWithChainID(t.privKey, new(big.Int).SetInt64(ch.ID))
 	opts.GasLimit = 300000
 
-	hash := crypto.Keccak256(data)
-	signature, err := crypto.Sign(signHash(hash), t.privKey)
+	signature, err := crypto.Sign(sha3.SoliditySHA3(
+		sha3.String("\x19Ethereum Signed Message:\n32"),
+		sha3.Bytes32(data),
+	), t.privKey)
 	if err != nil {
 		return errors.Wrap(err, "failed to sign transaction data", chainFields)
 	}

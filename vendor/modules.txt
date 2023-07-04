@@ -100,6 +100,9 @@ github.com/hashicorp/hcl/json/token
 # github.com/magiconair/properties v1.8.0
 ## explicit
 github.com/magiconair/properties
+# github.com/miguelmota/go-solidity-sha3 v0.1.1
+## explicit
+github.com/miguelmota/go-solidity-sha3
 # github.com/mitchellh/mapstructure v1.4.1
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
