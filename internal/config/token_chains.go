@@ -13,7 +13,7 @@ import (
 )
 
 func (c *config) TokenChains() tx.TokenChains {
-	return c.chains.Do(func() interface{} {
+	return c.tokenChains.Do(func() interface{} {
 		var cfg struct {
 			*url.URL `fig:"url,required"`
 		}

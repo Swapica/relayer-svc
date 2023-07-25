@@ -8,6 +8,9 @@ listener:
 transactor:
   private_key: "the same as signer.eth_signer in swapica-svc"
 
+token_chains:
+  url: "http://swapica"
+
 chains:
   list:
     - name: "goerli"
