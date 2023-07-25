@@ -1,0 +1,39 @@
+allOf:
+  - $ref: '#/components/schemas/TokenKey'
+  - type: object
+    required:
+      - attributes
+      - relationships
+    properties:
+      attributes:
+        type: object
+        required:
+          - chain_id
+          - token_id
+          - contract_address
+          - token_type
+          - max_amount
+        properties:
+          chain_id:
+            type: string
+          token_id:
+            type: string
+          contract_address:
+            type: string
+          token_type:
+            $ref: '#/components/schemas/TokenType'
+          max_amount:
+            type: number
+            format: float64
+      relationships:
+        type: object
+        required:
+          - chains
+        properties:
+          chains:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChainKey'

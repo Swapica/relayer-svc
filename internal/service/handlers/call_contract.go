@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"gitlab.com/distributed_lab/logan/v3"
 	"net/http"
 
 	"github.com/Swapica/relayer-svc/internal/service/requests"
@@ -20,6 +21,16 @@ func CallContract(w http.ResponseWriter, r *http.Request) {
 	chain := Chains(r).Get(request.Data.Attributes.Chain)
 	if chain == nil {
 		Log(r).WithField("chain", request.Data.Attributes.Chain).Debug("non-existent chain name")
+		ape.RenderErr(w, problems.NotFound())
+		return
+	}
+
+	tChain := TokenChains(r).Get("0x"+request.Data.Attributes.Data[90:130], request.Data.Attributes.Chain)
+	if tChain == nil {
+		Log(r).WithFields(logan.F{
+			"token": "0x" + request.Data.Attributes.Data[90:130],
+			"chain": request.Data.Attributes.Chain,
+		}).Debug("non-existent token chain")
 		ape.RenderErr(w, problems.NotFound())
 		return
 	}

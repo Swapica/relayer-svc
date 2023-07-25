@@ -14,6 +14,7 @@ const (
 	logCtxKey ctxKey = iota
 	chainsCtxKey
 	transactorCtxKey
+	tokenChainsCtxKey
 )
 
 func CtxLog(entry *logan.Entry) func(context.Context) context.Context {
@@ -44,4 +45,14 @@ func CtxTransactor(signer tx.Transactor) func(context.Context) context.Context {
 
 func Transactor(r *http.Request) tx.Transactor {
 	return r.Context().Value(transactorCtxKey).(tx.Transactor)
+}
+
+func CtxTokenChains(tokenChains tx.TokenChains) func(context.Context) context.Context {
+	return func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, tokenChainsCtxKey, tokenChains)
+	}
+}
+
+func TokenChains(r *http.Request) tx.TokenChains {
+	return r.Context().Value(tokenChainsCtxKey).(tx.TokenChains)
 }

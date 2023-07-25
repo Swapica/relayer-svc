@@ -8,5 +8,8 @@ type ResourceType string
 
 // List of ResourceType
 const (
+	CHAIN           ResourceType = "chain"
 	EVM_TRANSACTION ResourceType = "evm_transaction"
+	TOKEN_CHAIN     ResourceType = "token_chain"
+	TOKEN           ResourceType = "token"
 )

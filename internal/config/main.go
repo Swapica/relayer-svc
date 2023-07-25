@@ -14,6 +14,7 @@ type Config interface {
 	comfig.Listenerer
 	tx.Chainer
 	tx.Transactorer
+	tx.TokenChainer
 }
 
 type config struct {
@@ -22,8 +23,9 @@ type config struct {
 	comfig.Listenerer
 	getter kv.Getter
 
-	chains     comfig.Once
-	transactor comfig.Once
+	chains      comfig.Once
+	transactor  comfig.Once
+	tokenChains comfig.Once
 }
 
 func New(getter kv.Getter) Config {

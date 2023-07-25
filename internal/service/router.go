@@ -16,6 +16,7 @@ func (s *service) router() chi.Router {
 			handlers.CtxLog(s.log),
 			handlers.CtxChains(s.cfg.Chains()),
 			handlers.CtxTransactor(s.cfg.Transactor()),
+			handlers.CtxTokenChains(s.cfg.TokenChains()),
 		),
 	)
 	r.Route("/integrations/relayer", func(r chi.Router) {
