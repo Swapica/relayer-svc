@@ -38,7 +38,7 @@ func CallContract(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if commission is not >= 100%
-	commission, _ := new(big.Int).SetString(request.Data.Attributes.Data[130:194], 16)
+	commission, _ := new(big.Int).SetString(request.Data.Attributes.Data[130:192], 16)
 
 	base := big.NewInt(10)
 	exponent := big.NewInt(27)
